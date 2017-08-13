@@ -45,8 +45,11 @@ class TelegramCliWrapper
     exec "msg #{user} #{text}"
   end
 
-  def history user, limit = nil
-    exec ['history', user, limit].join ' '
+  def history peer_id, limit = nil
+    exec ['history', peer_id, limit].join ' '
   end
 
+  def resolve_username username
+    exec "resolve_username #{username}"
+  end
 end
