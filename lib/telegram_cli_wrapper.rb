@@ -2,6 +2,12 @@ require 'telegram_cli_wrapper/version'
 require 'json'
 require 'socket'
 
+class Message < OpenStruct
+  def unique_identifier
+    @unique_identifer ||= Digest::SHA256.digest(text.to_s + date.to_s)
+  end
+end
+
 class TelegramCliWrapper
 
   def initialize port: 2392, host: 'localhost', verbose: false
@@ -9,12 +15,12 @@ class TelegramCliWrapper
     @vebose = verbose
   end
 
-  def exec command
+  def exec command, object_class: OpenStruct
     @socket.puts command
     while str = @socket.gets
       puts "SOCKET READ #{str}" if @vebose
       if str != "\n" && !str['ANSWER']
-        return JSON.parse str, object_class: OpenStruct
+        return JSON.parse str, object_class: object_class
       end
     end
   end
@@ -46,7 +52,7 @@ class TelegramCliWrapper
   end
 
   def history peer_id, limit = nil
-    exec ['history', peer_id, limit].join ' '
+    exec ['history', peer_id, limit].join(' '), object_class: Message
   end
 
   def resolve_username username
