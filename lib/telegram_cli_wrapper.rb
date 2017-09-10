@@ -6,6 +6,10 @@ class Message < OpenStruct
   def unique_identifier
     @unique_identifer ||= Digest::SHA256.digest(text.to_s + date.to_s)
   end
+
+  def text_or_caption
+    (text || media.caption).to_s
+  end
 end
 
 class TelegramCliWrapper
