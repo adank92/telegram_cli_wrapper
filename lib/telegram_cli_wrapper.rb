@@ -10,6 +10,10 @@ class Message < OpenStruct
   def text_or_caption
     (text || media.caption).to_s
   end
+
+  def photo?
+    media&.type == 'photo'
+  end
 end
 
 class TelegramCliWrapper
@@ -61,5 +65,9 @@ class TelegramCliWrapper
 
   def resolve_username username
     exec "resolve_username #{username}"
+  end
+
+  def load_photo message_id
+    exec "load_photo #{message_id}"
   end
 end
