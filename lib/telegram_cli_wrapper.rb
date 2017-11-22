@@ -17,8 +17,10 @@ class Message < OpenStruct
 end
 
 class TelegramCliWrapper
+  attr_reader :port
 
   def initialize port: 2392, host: 'localhost', verbose: false
+    @port   = port
     @socket = TCPSocket.new host, port
     @vebose = verbose
   end
