@@ -11,6 +11,10 @@ class Message < OpenStruct
     (text || media.caption).to_s
   end
 
+  def media?
+    !media.nil?
+  end
+
   def photo?
     media&.type == 'photo'
   end
